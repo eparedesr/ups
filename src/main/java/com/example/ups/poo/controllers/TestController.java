@@ -16,7 +16,11 @@ public class TestController {
         return "Hello " + name + " " + lastname + ", this is my first SpringBoot project...!";
     }
     @GetMapping("/hello")
-    public String hello(@RequestParam String name, @RequestParam String lastname){
-        return "Hello " + name + " " + lastname + ", this is my first SpringBoot project xxx!";
+    public String hello(@RequestParam String name, @RequestParam(required = false) String lastname){
+        if (lastname == null) {
+            return "Hello " + name + ", this is my first SpringBoot project xxx!";
+        } else {
+            return "Hello " + name + " " + lastname + ", this is my first SpringBoot project xxx!";
+        }
     }
 }
