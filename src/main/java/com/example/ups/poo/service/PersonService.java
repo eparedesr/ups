@@ -1,6 +1,7 @@
 package com.example.ups.poo.service;
 
 import com.example.ups.poo.dto.Person;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,16 +13,11 @@ import java.util.List;
 public class PersonService {
     List<Person> personList = new ArrayList<>();
 
-    public List<Person> getAllPeople(){
-        Person p1 = new Person();
-        p1.setName("Erick");
-        p1.setLastname("Paredes");
-        p1.setAge(20);
-        p1.setId("0955456512");
-        Person p2 = new Person("Samuel", "Martinez", 19, "1735456512");
-        personList.add(p1);
-        personList.add(p2);
-        return personList;
+    public ResponseEntity getAllPeople(){
+        if(personList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Person list is Empty");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(personList);
     }
     //method that finds and returns person by id
     public ResponseEntity getPersonById(String id){
@@ -32,6 +28,11 @@ public class PersonService {
         }
         String message ="Person with id: " + id +" not found.";
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    }
+
+    public ResponseEntity createPerson(Person person) {
+        personList.add(person);
+        return ResponseEntity.status(HttpStatus.OK).body("Person Successfully Registered");
     }
 }
 
