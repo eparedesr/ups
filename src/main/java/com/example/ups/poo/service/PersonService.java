@@ -30,7 +30,22 @@ public class PersonService {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
 
-    public ResponseEntity createPerson(Person person) {
+    public ResponseEntity createPerson(Person person){
+        for(Person registeredPerson: personList){
+            if(registeredPerson.getId().equalsIgnoreCase(person.getId())){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Person already exists");
+            }
+        }
+
+    if(person.getName() == null || person.getName().isEmpty() || person.getName().isBlank()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, Insert a name");
+    } else if(person.getLastname() == null || person.getLastname().isEmpty() || person.getLastname().isBlank()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, Insert a last name");
+    } else if(person.getAge() <= 0){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, Insert an age");
+    } else if(person.getId() == null || person.getId().isEmpty() || person.getId().isBlank()){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, Insert an id");
+    }
         personList.add(person);
         return ResponseEntity.status(HttpStatus.OK).body("Person Successfully Registered");
     }
