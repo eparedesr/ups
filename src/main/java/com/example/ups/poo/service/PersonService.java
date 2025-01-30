@@ -36,16 +36,11 @@ public class PersonService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Person already exists");
             }
         }
+        
+        if(person.getName() == null || person.getLastname() == null || person.getAge() <= 0 || person.getId() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, Insert all data");
+        }
 
-    if(person.getName() == null || person.getName().isEmpty() || person.getName().isBlank()) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, Insert a name");
-    } else if(person.getLastname() == null || person.getLastname().isEmpty() || person.getLastname().isBlank()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, Insert a last name");
-    } else if(person.getAge() <= 0){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, Insert an age");
-    } else if(person.getId() == null || person.getId().isEmpty() || person.getId().isBlank()){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, Insert an id");
-    }
         personList.add(person);
         return ResponseEntity.status(HttpStatus.OK).body("Person Successfully Registered");
     }
