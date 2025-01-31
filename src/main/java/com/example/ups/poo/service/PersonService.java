@@ -5,6 +5,8 @@ import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,26 @@ public class PersonService {
 
         personList.add(person);
         return ResponseEntity.status(HttpStatus.OK).body("Person Successfully Registered");
+    }
+
+    public ResponseEntity updatePerson(Person person) {
+        for (Person per : personList) {
+            if (per.getId().equalsIgnoreCase(person.getId())) {
+                if (person.getName() != null) {
+                    per.setName(person.getName());
+                }
+                if (person.getLastname() != null) {
+                    per.setLastname(person.getLastname());
+                }
+                if (person.getAge() > 0) {
+                    per.setAge(person.getAge());
+                }
+                String message = ("Person with id: " + person.getId() + " was successfully updated.");
+                return ResponseEntity.status(HttpStatus.OK).body(message);
+            }
+        }
+        String message2 = ("Person with id: " + person.getId() + " was not found.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message2);
     }
 }
 
