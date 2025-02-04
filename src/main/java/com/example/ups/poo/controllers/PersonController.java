@@ -1,8 +1,7 @@
 package com.example.ups.poo.controllers;
 
-import com.example.ups.poo.dto.Person;
+import com.example.ups.poo.dto.PersonDTO;
 import com.example.ups.poo.service.PersonService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,19 +24,18 @@ public class PersonController {
         return personService.getPersonById(id);
     }
 
-    @PostMapping("/person")
-    public ResponseEntity createPerson(@RequestBody Person person){
-        return personService.createPerson(person);
+    @PostMapping("/personDTO")
+    public ResponseEntity createPerson(@RequestBody PersonDTO personDTO){
+        return personService.createPerson(personDTO);
     }
 
-    @PutMapping("/update-person")
-    public ResponseEntity updatePerson(@RequestBody Person person){
-        return personService.updatePerson(person);
+    @PutMapping("/update-personDTO")
+    public ResponseEntity updatePerson(@RequestBody PersonDTO personDTO){
+        return personService.updatePerson(personDTO);
     }
 
     @DeleteMapping("/delete-person")
     public ResponseEntity deletePerson(@RequestParam String id){
-        //TODO: implement deletePersonById and replace it.
         return personService.deletePersonById(id);
     }
 }

@@ -1,86 +1,83 @@
 package com.example.ups.poo.service;
 
-import com.example.ups.poo.dto.Person;
-import org.apache.coyote.Response;
+import com.example.ups.poo.dto.PersonDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class PersonService {
-    List<Person> personList = new ArrayList<>();
+    List<PersonDTO> personDTOList = new ArrayList<>();
 
     public ResponseEntity getAllPeople(){
-        if(personList.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Person list is Empty");
+        if(personDTOList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PersonDTO list is Empty");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(personList);
+        return ResponseEntity.status(HttpStatus.OK).body(personDTOList);
     }
     //method that finds and returns person by id
     public ResponseEntity getPersonById(String id){
-        for(Person person: personList){
-            if(id.equalsIgnoreCase(person.getId())){
-                return ResponseEntity.status(HttpStatus.OK).body(person);
+        for(PersonDTO personDTO : personDTOList){
+            if(id.equalsIgnoreCase(personDTO.getId())){
+                return ResponseEntity.status(HttpStatus.OK).body(personDTO);
             }
         }
-        String message ="Person with id: " + id +" not found.";
+        String message ="PersonDTO with id: " + id +" not found.";
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
 
-    public ResponseEntity createPerson(Person person){
-        for(Person registeredPerson: personList){
-            if(registeredPerson.getId().equalsIgnoreCase(person.getId())){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Person already exists");
+    public ResponseEntity createPerson(PersonDTO personDTO){
+        for(PersonDTO registeredPersonDTO : personDTOList){
+            if(registeredPersonDTO.getId().equalsIgnoreCase(personDTO.getId())){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("PersonDTO already exists");
             }
         }
         
-        if(person.getName() == null || person.getLastname() == null || person.getAge() <= 0 || person.getId() == null) {
+        if(personDTO.getName() == null || personDTO.getLastname() == null || personDTO.getAge() <= 0 || personDTO.getId() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, Insert all data");
         }
 
-        personList.add(person);
-        return ResponseEntity.status(HttpStatus.OK).body("Person Successfully Registered");
+        personDTOList.add(personDTO);
+        return ResponseEntity.status(HttpStatus.OK).body("PersonDTO Successfully Registered");
     }
 
-    public ResponseEntity updatePerson(Person person) {
-        for (Person per : personList) {
-            if (per.getId().equalsIgnoreCase(person.getId())) {
-                if (person.getName() != null) {
-                    per.setName(person.getName());
+    public ResponseEntity updatePerson(PersonDTO personDTO) {
+        for (PersonDTO per : personDTOList) {
+            if (per.getId().equalsIgnoreCase(personDTO.getId())) {
+                if (personDTO.getName() != null) {
+                    per.setName(personDTO.getName());
                 }
-                if (person.getLastname() != null) {
-                    per.setLastname(person.getLastname());
+                if (personDTO.getLastname() != null) {
+                    per.setLastname(personDTO.getLastname());
                 }
-                if (person.getAge() > 0) {
-                    per.setAge(person.getAge());
+                if (personDTO.getAge() > 0) {
+                    per.setAge(personDTO.getAge());
                 }
-                String message = ("Person with id: " + person.getId() + " was successfully updated.");
+                String message = ("PersonDTO with id: " + personDTO.getId() + " was successfully updated.");
                 return ResponseEntity.status(HttpStatus.OK).body(message);
             }
         }
-        String message2 = ("Person with id: " + person.getId() + " was not found.");
+        String message2 = ("PersonDTO with id: " + personDTO.getId() + " was not found.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message2);
     }
 
     public ResponseEntity deletePersonById(String id){
         if (id != null && id.length()<10){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Person with id: " + id + " doesn't have the required length (10 chars min.)");
+                    .body("PersonDTO with id: " + id + " doesn't have the required length (10 chars min.)");
         }
-        for (Person person: personList){
-            if(id.equalsIgnoreCase(person.getId())){
-                personList.remove(person);
+        for (PersonDTO personDTO : personDTOList){
+            if(id.equalsIgnoreCase(personDTO.getId())){
+                personDTOList.remove(personDTO);
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body("Person with id: " + id + " was successfully deleted.");
+                        .body("PersonDTO with id: " + id + " was successfully deleted.");
             }
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("Person with id: " + id + " was not found.");
+                .body("PersonDTO with id: " + id + " was not found.");
     }
 }
 
