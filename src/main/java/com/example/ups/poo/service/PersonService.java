@@ -19,7 +19,7 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-    public ResponseEntity getAllPeople(){
+    public List<PersonDTO> fetchAllPeopleRecords(){
         Iterable<Person> personIterable = personRepository.findAll();
         List<PersonDTO> personDTOList = new ArrayList<>();
 
@@ -30,6 +30,11 @@ public class PersonService {
             personDTO.setId(per.getPersonId());
             personDTOList.add(personDTO);
         }
+        return personDTOList;
+    }
+
+    public ResponseEntity getAllPeople(){
+        List<PersonDTO> personDTOList = fetchAllPeopleRecords();
 
         if(personDTOList.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PersonDTO list is Empty");
@@ -37,17 +42,18 @@ public class PersonService {
         return ResponseEntity.status(HttpStatus.OK).body(personDTOList);
     }
 
-//    //method that finds and returns person by id
-//    public ResponseEntity getPersonById(String id){
-//        for(PersonDTO personDTO : personDTOList){
-//            if(id.equalsIgnoreCase(personDTO.getId())){
-//                return ResponseEntity.status(HttpStatus.OK).body(personDTO);
-//            }
-//        }
-//        String message ="PersonDTO with id: " + id +" not found.";
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
-//    }
-//
+    //method that finds and returns person by id
+    public ResponseEntity getPersonById(String id){
+        List<PersonDTO> personDTOList = fetchAllPeopleRecords();
+        for(PersonDTO personDTO : personDTOList){
+            if(id.equalsIgnoreCase(personDTO.getId())){
+                return ResponseEntity.status(HttpStatus.OK).body(personDTO);
+            }
+        }
+        String message ="PersonDTO with id: " + id +" not found.";
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+    }
+
 //    public ResponseEntity createPerson(PersonDTO personDTO){
 //        for(PersonDTO registeredPersonDTO : personDTOList){
 //            if(registeredPersonDTO.getId().equalsIgnoreCase(personDTO.getId())){
