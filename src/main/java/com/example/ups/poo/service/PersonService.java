@@ -77,6 +77,10 @@ public class PersonService {
     }
 
     public ResponseEntity createPerson(PersonDTO personDTO) {
+        if (personDTO.getId() == null || personDTO.getId().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid format. Please provide an ID.");
+        }
+
         if (personRepository.findByPersonId(personDTO.getId()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The ID is already registered.");
         }
@@ -86,7 +90,7 @@ public class PersonService {
         }
 
         if (personDTO.getAge() <= 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Age is required.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Format. Please provide an age.");
         }
 
         Person person = mapPersonDTOtoPerson(personDTO);
@@ -98,7 +102,7 @@ public class PersonService {
     public ResponseEntity updatePerson(PersonDTO personDTO) {
         Optional<Person> personOptional = personRepository.findByPersonId(personDTO.getId());
         if (personDTO.getId() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please, insert an ID.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid format. Please provide an ID.");
         }
 
         if (personOptional.isEmpty()) {
@@ -130,7 +134,7 @@ public class PersonService {
         }
 
         personRepository.delete(personOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Person deleted successfully..!");
+        return ResponseEntity.status(HttpStatus.OK).body("Person deleted successfully.");
     }
 }
 
