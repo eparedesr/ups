@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,7 +121,10 @@ public class PersonService {
 
         if (personDTO.getAge() > 0) {
             personToUpdate.setAge(personDTO.getAge());
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Format. Please provide a correct format of age (> 1 year).");
         }
+        
         personRepository.save(personOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Person with ID: " + personDTO.getId() + " updated successfully.");
     }
